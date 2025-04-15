@@ -1,0 +1,37 @@
+#!url=https://raw.githubusercontent.com/aleotoidayy/ByAleooo/main/aleo_LocketGold.sgmodule
+#!name= ★彡 𝗟𝗼𝗰𝗸𝗲𝘁 𝗚𝗼𝗹𝗱 彡★
+#!desc= 𝗕𝘆: A Lẹo – since 2009.08.17
+
+[Script]
+revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), requires-body=true, max-size=-1, timeout=60, script-response-body=(() => {
+  let obj = {
+    "subscriber": {
+      "entitlements": {
+        "premium": {
+          "expires_date": "2099-12-31T23:59:59Z",
+          "product_identifier": "locket.gold.yearly",
+          "purchase_date": "2009-08-17T00:00:00Z"
+        }
+      },
+      "first_seen": "2009-08-17T00:00:00Z",
+      "original_application_version": "1.0",
+      "original_purchase_date": "2009-08-17T00:00:00Z",
+      "subscriptions": {
+        "locket.gold.yearly": {
+          "expires_date": "2099-12-31T23:59:59Z",
+          "original_purchase_date": "2009-08-17T00:00:00Z",
+          "purchase_date": "2009-08-17T00:00:00Z"
+        }
+      }
+    }
+  };
+  $done({ body: JSON.stringify(obj) });
+})()
+
+deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), timeout=60, script-request-header=($request) => {
+  delete $request.headers["x-revenuecat-etag"];
+  $done({headers : $request.headers});
+}
+
+[MITM]
+hostname = %APPEND% api.revenuecat.com
